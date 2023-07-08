@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="22sp"
-        android:text=""
+        android:text="60"
         android:padding="20dp"
         android:layout_margin="20dp"
           />

@@ -6,31 +6,33 @@ import android.os.CountDownTimer
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-
+import com.example.countdowntimerdemo.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
+    private var binding : ActivityMainBinding? = null
     private var countDownTimer : CountDownTimer? = null//variable for timer
     private var timeDuration : Long = 60000 //Duration of timer in ms
     private var pauseOffSet : Long = 0 // pauseOffset = timeDuration - TimeLeft
-    private val tvTimer:TextView = findViewById(R.id.tvTimer)
-    private val btnStart:Button = findViewById(R.id.button)
-    private val btnPause:Button = findViewById(R.id.button2)
-    private val btnStop:Button = findViewById(R.id.button3)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
 
-        tvTimer.text = (timeDuration/1000).toString()
-        btnStart.setOnClickListener{
+
+        binding?.button?.setOnClickListener{
+            if(countDownTimer != null){ // in case someone presses start more than one time continuously it can freeze to stop this we resert the timer
+                countDownTimer!!.cancel()
+            }
             startTimer(pauseOffSet)
         }
-        btnPause.setOnClickListener{
+        binding?.button2?.setOnClickListener{
             pauseTimer()
         }
-        btnStop.setOnClickListener{
+        binding?.button3?.setOnClickListener{
             resetTimer()
         }
 
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         {
             override fun onTick(millisUntilFinished: Long) {
                 pauseOffSet = timeDuration - millisUntilFinished
-                tvTimer.text = (millisUntilFinished/1000).toString()
+                binding?.tvTimer?.text = (millisUntilFinished/1000).toString()
 
             }
             override fun onFinish() {
@@ -58,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     private fun resetTimer(){
         if(countDownTimer != null){
             countDownTimer!!.cancel()
-            tvTimer.text = (timeDuration/1000).toString()
+            binding?.tvTimer?.text = (timeDuration/1000).toString()
             countDownTimer = null
             pauseOffSet = 0
         }
